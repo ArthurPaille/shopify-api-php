@@ -71,7 +71,10 @@ abstract class Base
 
         $saveBody = [static::getJsonBodyName() => $data];
         $response = self::request($method, $method, $this->session, [], [], $saveBody, $this);
-
+         $callLimit = str_replace('/40', '', $response->getHeaders()['X-Shopify-Shop-Api-Call-Limit'][0]);
+                if ((int) $callLimit >= 38) {
+                    sleep(2);
+                }
         if ($updateObject) {
             $body = $response->getDecodedBody();
 
